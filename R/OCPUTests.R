@@ -274,3 +274,69 @@ sixSigmaDemos <- function(){
         with(ss.data.pb3,
              plot(qcc,stockouts,orders,type="p"))
 }
+
+
+sscp <- function(yTag = "Moisture"){
+        require(SixSigma)
+        data <- getData2()
+        data<-data[data$Spec=="WMP",]
+        
+        ss.ca.cp(x = data$Moisture,LSL = 0,USL = 4.5,alpha = 0.05)
+        
+}
+sscpk <- function(yTag = "Moisture"){
+        require(SixSigma)
+        data <- getData2()
+        data<-data[data$Spec=="WMP",]
+        
+        ss.ca.cpk(x = data$Moisture,LSL = 0,USL = 4.5,alpha = 0.05)
+        
+}
+
+ssca <- function (yTag = "Moisture"){
+        require(SixSigma)
+        data <- getData2()
+        data<-data[data$Spec=="WMP",]
+        
+        plot <- ss.study.ca(xST = data$Moisture[1:25],USL = 4.5,LSL = 0,Target = 3.7,alpha = 0.05,f.main = "Moisture Capability Study",f.sub = "Moisture")
+        print(plot)
+}
+
+ssci <- function (yTag = "Moisture"){
+        
+        data <- getData2()
+        data$test = data[,yTag]
+        require(SixSigma)
+        ss.ci(x = test, data = data, alpha = 0.05, sub = paste(yTag,"Test"),digits = 2)
+        
+}
+
+sslfa <- function(yTag = "Moisture"){
+        data <- getData2()
+        data$test = data[,yTag]
+        require(SixSigma)
+        p <-ss.lfa(lfa.data = data,lfa.ctq = yTag,lfa.Delta = 0.5,lfa.Y0 = 3.1,lfa.L0 = 0.0003,lfa.output = "both")
+        p
+}
+
+box.plot <- function(yTag = "Moisture",cTag = "Spec"){
+        data <- getData2()
+        data$y = data[,yTag]
+        data$c = data[,cTag]
+        
+        boxplot(formula = Moisture ~ Spec,data = data)
+        
+}
+
+ssrr <- function (){
+        
+        require(SixSigma)
+        ss.rr(time1, prototype, operator, data=ss.data.rr, sub="Six Sigma Demo")
+}
+
+rChart <- function(){
+        library(rCharts)
+        names(iris) = gsub("\\.", "", names(iris))
+        rPlot(SepalLength ~ SepalWidth | Species, data = iris, color = 'Species', type = 'point')
+        
+}
